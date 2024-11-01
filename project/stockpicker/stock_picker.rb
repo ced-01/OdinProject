@@ -1,19 +1,55 @@
-# Localiser la différence_max soit prix_max_vente - prix_min_vente
-# Vérifier les conditions prix_max ne peut pas être le premier jour prices[0]
-# Si oui re-localiser prix_max et stocker son index
-# prix_min ne peut pas être aprés prix_max (faut acheter avant de vendre pardis)
-# ou prix max ne peut pas etre avant prix_min
-# 
-#
-# Trouver la valeur/prix minimum si l'index/jour est inférieur 
-# à l'index/jour du prix/valeur maximum
-# et inversement !
+# 1. Comprendre l'objectif
 
-def valid_sell_days()
-end
+#     But : Créer une méthode qui identifie les jours optimaux pour acheter et vendre des actions afin de maximiser le profit.
+#     Exigences : Travailler avec un tableau de prix et retourner un tableau d'indices pour les jours d'achat et de vente.
 
-prices = [3, 6, 9, 1, 5]
-# [17, 3, 6, 9, 15, 8, 6, 1, 10]
+# 2. Analyser les données d'entrée
+
+#     Input : Un tableau de prix des actions, où chaque index représente un jour.
+#     Exemple de données : prices = [17, 3, 6, 9, 15, 8, 6, 1, 10].
+
+# 3. Initialiser les variables
+
+#     Créer un tableau ou un hash pour stocker les jours et les prix associés.
+#     Créer un tableau pour stocker les indices de jours d'achat et de vente.
+
+# 4. Remplir le hash des jours et des prix
+
+#     Itérer sur le tableau de prix avec des index.
+#     Remplir le hash avec des paires jour-prix.
+
+# 5. Trouver les jours d'achat et de vente
+
+#     Utiliser une boucle pour :
+#         Identifier le jour avec le prix minimum.
+#         Identifier le jour avec le prix maximum.
+#     Vérifier si le jour d'achat est avant le jour de vente.
+#     Si c'est le cas, stocker ces indices dans le tableau de résultats.
+#     Sinon, supprimer le jour avec le prix minimum et continuer la recherche.
+# Probléme à chaque itération où l'un index est supprimer se qui retourne nil
+# Solution utilisation d'un hash
+
+# def valid_buy_sell_days(prices)
+#   arr_buy_sell = []
+
+#   loop do
+#     index_price_min = prices.find_index(prices.min)
+#     index_price_max = prices.find_index(prices.max)
+
+#     if index_price_min < index_price_max
+#       arr_buy_sell << index_price_min
+#       break
+#     else
+#       # supprimer la valeur min du tableau
+#       prices.delete_at(index_price_min)
+#       # rechercher de nouveau la valeur min avec loop do; end
+#     end
+#   end
+#   p arr_buy_sell
+# end
+
+# prices = [3, 6, 9, 1, 5]
+# prices = [17, 3, 6, 9, 15, 8, 6, 1, 10]
 
 def stock_picker(prices)
   hash_days_prices = Hash.new(0)
@@ -21,22 +57,33 @@ def stock_picker(prices)
     hash_days_prices[day] = price
   end
 
-  arr_buy_sell = Array.new(0)
-  index_price_min = prices.find_index(prices.min)
-  index_price_max = prices.find_index(prices.max)
+  # ou  hash_days_prices = prices.each_with_index.to_h
 
-  if  index_price_min < index_price_max
-    arr_buy_sell << index_price_min
-  else
-    # supprimer l'index min du tableau
-    # rechercher de nouveau la valeur min
-    # fair eune boucle while ou loop do
+  arr_buy_sell = Array.new(0)
+  hash_days_prices.reject! { |day, price| day == 0 && price == hash_days_prices.values.max }
+
+  loop do
+    day_buy_min = hash_days_prices.key(hash_days_prices.values.min)
+    day_sell_max = hash_days_prices.key(hash_days_prices.values.max)
+
+    if day_buy_min < day_sell_max
+      arr_buy_sell << day_buy_min << day_sell_max
+      break
+    else
+      # supprimer la valeur min du tableau
+      hash_days_prices.delete(day_buy_min)
+      # Empêche itération infinie ou no method nil si toute les valeurs sont supprimées
+      break if hash_days_prices.empty?
+      # rechercher de nouveau la valeur min avec loop do; end
+    end
   end
 
-    
-  arr_buy_sell << 
+  # Renvoie [0, 0] si pas de profit possible
+  gain = hash_days_prices[arr_buy_sell[1]] - hash_days_prices[arr_buy_sell[0]]
+  p gain
+  arr_buy_sell = [0, 0] if gain <= 0
+
   p arr_buy_sell
-  p gain_max = prices.max - prices.min
 end
 
-stock_picker(prices)
+stock_picker([17, 3, 6, 9, 15, 8, 6, 1, 10])

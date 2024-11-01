@@ -13,7 +13,7 @@ RSpec.describe "stock_picker" do
   end
 
   it "retourne [0, 0] si pas de profit faisable" do
-    result = stock_picker([1, 9, 8, 7])
+    result = stock_picker([9, 8, 7, 1])
     expect(result).to eq([0, 0])
   end
 end
