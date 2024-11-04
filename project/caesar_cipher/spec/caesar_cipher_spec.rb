@@ -1,3 +1,5 @@
+# frozen_string_litteral: true
+
 require_relative "../caesar_cipher"
 
 # 1_"noobs" mode

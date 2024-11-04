@@ -26,30 +26,6 @@
 #     Vérifier si le jour d'achat est avant le jour de vente.
 #     Si c'est le cas, stocker ces indices dans le tableau de résultats.
 #     Sinon, supprimer le jour avec le prix minimum et continuer la recherche.
-# Probléme à chaque itération où l'un index est supprimer se qui retourne nil
-# Solution utilisation d'un hash
-
-# def valid_buy_sell_days(prices)
-#   arr_buy_sell = []
-
-#   loop do
-#     index_price_min = prices.find_index(prices.min)
-#     index_price_max = prices.find_index(prices.max)
-
-#     if index_price_min < index_price_max
-#       arr_buy_sell << index_price_min
-#       break
-#     else
-#       # supprimer la valeur min du tableau
-#       prices.delete_at(index_price_min)
-#       # rechercher de nouveau la valeur min avec loop do; end
-#     end
-#   end
-#   p arr_buy_sell
-# end
-
-# prices = [3, 6, 9, 1, 5]
-# prices = [17, 3, 6, 9, 15, 8, 6, 1, 10]
 
 def stock_picker(prices)
   hash_days_prices = Hash.new(0)

@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 # Le Chiffre de César est une technique de chiffrement simple qui peut être implémentée en Ruby. Voici les points clés pour développer un Chiffre de César en Ruby :
 # Principe de base :
 # Chaque lettre du message est décalée d'un certain nombre de positions dans l'alphabet.
 # Par exemple, avec un décalage de 3, 'A' devient 'D', 'B' devient 'E', etc.
 ###############################################################################################
 #
-#Version noobs - projet individuel - entrainement :
+# Version noobs - projet individuel - entrainement :
 # 1 => Convertir la chaîne de carractére string en nombre ASCII => def alphabet_to_num; end :
 #   a) Récupérer chaque lettre de la chaîne string dans un tableau; Méthode => .split("")
 #   b) Convertir chaque lettre en nombre ASCII correspondants => .ord
@@ -12,7 +14,7 @@
 #      Ajouter le nombre shift à chaque lettre convertie de arr_num_org & stocker dans arr_num_shift
 #   c) Reconvertir en alphabet décalé de shift donc! les nombres de arr_num_shift dans arr_encrypt => .chr
 #      Joindre le tableau arr_encrypt et le retourner => .join()
-##!!!!! *les caractéres spéciaux (asccii) doit être laisser intact (!,., ,...)
+# #!!!!! *les caractéres spéciaux (asccii) doit être laisser intact (!,., ,...)
 ################################################################################################
 #
 # Version pro : Organigramme pour le chiffrement César
@@ -86,8 +88,7 @@
 #
 # 1 - convert_to_ascii
 def convert_to_ascii(string)
-  arr_ascii = string.split("").map(&:ord)
-  arr_ascii
+  string.split("").map(&:ord)
 end
 
 # 2 - Décalage de shift pour les lettres de l'aphabet(code ascii = 65-90 et 97-122).
@@ -107,32 +108,29 @@ end
 # 2 - Aprés RSpect - lefth_shit qui recouvre tous les cas de figures.
 
 def left_shift(arr_ascii, shift)
-  arr_shifted = arr_ascii.map do |ascii|
+  arr_ascii.map do |ascii|
     if ascii.between?(65, 90) # A-Z
-      ((ascii - 65 + shift) % 26 + 65)
+      (((ascii - 65 + shift) % 26) + 65)
     elsif ascii.between?(97, 122) # a-z
-      ((ascii - 97 + shift) % 26 + 97)
+      (((ascii - 97 + shift) % 26) + 97)
     else
       ascii # Conserver les cractéres spéciaux
     end
   end
-  arr_shifted
 end
 
 # 3 - Reconvertir en lettre avec décalage ou encryptage
 def convert_to_letter(arr_shifted)
-  arr_encrypt = arr_shifted.map(&:chr).join("")
-  arr_encrypt
+  arr_shifted.map(&:chr).join("")
 end
 
 # 4 - Caesar_cipher => modularité & séparation des tâches (separation of concerns)
 
 def caesar_cipher(string, shift)
-  shift = shift % 26 # Le modulo 26 garantit que les décalages bouclent correctement
+  shift %= 26 # Le modulo 26 garantit que les décalages bouclent correctement
   arr_ascii = convert_to_ascii(string)
   arr_shifted = left_shift(arr_ascii, shift)
-  arr_encrypt = convert_to_letter(arr_shifted)
-  arr_encrypt
+  convert_to_letter(arr_shifted)
 end
 
 # puts caesar_cipher("abc bcd!", 1)
