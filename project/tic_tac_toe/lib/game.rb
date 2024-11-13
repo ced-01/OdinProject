@@ -1,27 +1,39 @@
-# Initialisation d'une partie
-game = HumanPlayers.new
-loop do
-  puts "Do you want play a game? [Yes/No]"
-  answer = gets.chomp.upcase
+game = Board.new
 
-  case answer
-  when "Y", "YES"
-    puts "Player 1 with #{game.current_player} start: choose where to place X ? [1..9]"
-    display_board()
-    break
-  when "Q", "QUIT", "NO", "N"
-    exit
-  else
-    puts "sorry choose Yes or No or Quit ?"
+puts "player_1 play with X symbol & start, what's your name ?"
+name = gets.chomp.capitalize
+player_1 = Player.new(name, "X")
+
+#Joueur 2
+puts "player_2 play with O symbol, what's your name ?"
+name = gets.chomp.capitalize
+player_2 = Player.new(name, "O")
+
+# Tant que la partie n'est pas finie - boucle
+loop do
+  current_player = player_1
+  puts "#{player_1.name} choose your X position \n"
+  game.display_board
+
+  # obliger le joueur 1 a entrer une valeur valide
+  loop do
+    position = gets.chomp
+    if game.valid_position?(position, current_player)
+      game.updated_board(position, current_player)
+      break 
+    end
+  end
+
+  current_player = player_2
+  puts "#{player_2.name} choose your O position \n"
+
+  # obliger le joueur 2 a entrer une valeur valide
+  loop do
+    position = gets.chomp
+    if game.valid_position?(position, current_player)
+      game.updated_board(position, current_player) 
+      break
+    end
   end
 end
 
-# Joueur 1 joue
- player = game.current_player
- puts "enter your choice"
- move = gets.chomp.downcase
- if player == "X" 
-  display_board(board[move] = player)
- end
- p display_board
-# Joueur 2 joue
