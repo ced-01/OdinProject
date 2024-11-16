@@ -14,19 +14,36 @@ class Board
   end
 
   def valid_position?(position)
-      # to_i renvoi 0 pour une chaîne de caractére - Probléme
-      # Verifie que position est un chiffre compris entre 0 et 8 - Solution
-    if position.match?(/^[0-8]$/)
+    # Convertit `position` en chaîne pour permettre l'utilisation de `match?`
+    position = position.to_s
+
+    # Vérifie que la position est bien un chiffre unique de 0 à 8
+    # Evite une conversion de string en integer qui fait 0.
+    if position.match?(/^[0-8]$/) 
       position = position.to_i
-      # Si la case du jeux est un integer alors la case est disponible,
-      # et renvoie true 
       board[position].match?(/^\d$/)
     else
+      puts "Not possible ! Start again !!!"
       false
     end
   end
 
-  def updated_board(position, current_player)
+  def update_board(position, current_player)
+    position = position.to_i
     board[position] = current_player.symbol
   end  
+
+  def full_board?
+    board.all? { |position| position == "O" || position == "X" }
+  end
+
+  def combo_winner?(current_player)
+    winner_index = [ [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6],
+            [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6] ].freeze
+
+    winner_index.any? do |combination|
+      combination.all? { |index| board[index] == current_player.symbol }
+
+    end
+  end
 end
