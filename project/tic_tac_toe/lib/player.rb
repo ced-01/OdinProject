@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# deux joueurs sont nécessaires
 class Player
   attr_reader :name, :symbol
 

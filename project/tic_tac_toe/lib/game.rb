@@ -15,7 +15,7 @@ puts
 # Tant que la partie n'est pas finie - boucle
 loop do
   current_player = player_1
-  puts "#{player_1.name} choose your X position 0 to 8 \n\n"
+  puts "#{current_player.name} choose your X position 0 to 8 \n\n"
   game.display_board
 
   # obliger le joueur 1 a entrer une valeur valide
@@ -29,7 +29,7 @@ loop do
   end
 
   if game.combo_winner?(current_player)
-    puts "#{current_player} is the winner !!!"
+    puts "#{current_player.name} is the winner !!!"
     break
   end
 
@@ -39,7 +39,7 @@ loop do
   end
 
   current_player = player_2
-  puts "#{player_2.name} choose your O position \n\n"
+  puts "#{current_player.name} choose your O position \n\n"
 
   # obliger le joueur 2 a entrer une valeur valide
   loop do
