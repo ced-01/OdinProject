@@ -1,32 +1,72 @@
-game = Board.new
+# frozen_string_literal: true
+require_relative "./lib/board"
+require_relative "./lib/player"
 
-puts "player_1 play with X symbol & start, what's your name ?"
-name = gets.chomp.capitalize
-player_1 = Player.new(name, "X")
-puts
 
-#Joueur 2
-puts "player_2 play with O symbol, what's your name ?"
-name = gets.chomp.capitalize
-player_2 = Player.new(name, "O")
-puts
+class Game
+  attr_reader :board, :players, :current_player
 
-puts
+  def initialize
+    @board = Board.new
+    @players = create_players
+    @current_player = players.first
+  end
+
+  def play
+    loop do
+
+    end
+
+  end
+end
+
+private
+
+def create_players
+  puts "Player 1, enter your name (X)"
+  player1 = Player.new(gets.chomp.capitalize, "X")
+
+  puts "player2 play with O symbol, what's your name ?"
+  player2 = Player.new(gets.chomp.capitalize, "O")
+
+  [player1, player2]
+end
+
+def display_game_state
+  puts "\nCurrent board:"
+  board.display_board
+end
+
+def player_turn
 # Tant que la partie n'est pas finie - boucle
-loop do
-  current_player = player_1
-  puts "#{current_player.name} choose your X position 0 to 8 \n\n"
-  game.display_board
-
-  # obliger le joueur 1 a entrer une valeur valide
   loop do
+    puts "#{current_player.name} choose a position (0-8):"
     position = gets.chomp
-    if game.valid_position?(position)
-      game.update_board(position, current_player)
-      game.display_board
+
+    if board.valid_position?(position)
+      board.update_board(position.to_i, current_player)
       break 
+    else
+      puts "Invalid position. Please try again."
     end
   end
+end
+  
+def switch_player
+  @current_player = players.find{ |player| player != current_player } 
+end
+
+def game_over?
+  if winner?
+    puts "#{current_player.name} wins! 🎉"
+    true
+  elsif draw?
+    puts "It's a draw! 🤝"
+    true
+  else
+    false
+  end
+end
 
   if game.combo_winner?(current_player)
     puts "#{current_player.name} is the winner !!!"
@@ -38,18 +78,8 @@ loop do
     break
   end
 
-  current_player = player_2
+  current_player = player2
   puts "#{current_player.name} choose your O position \n\n"
-
-  # obliger le joueur 2 a entrer une valeur valide
-  loop do
-    position = gets.chomp
-    if game.valid_position?(position)
-      game.update_board(position, current_player)
-      game.display_board
-      break
-    end
-  end
 
   if game.combo_winner?(current_player)
     puts "#{current_player.name} is the winner !!!"
