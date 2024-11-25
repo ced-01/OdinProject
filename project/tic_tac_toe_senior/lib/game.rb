@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-require_relative "./lib/board"
-require_relative "./lib/player"
+require_relative "./board"
+require_relative "./player"
 
 
 class Game
@@ -14,76 +14,55 @@ class Game
 
   def play
     loop do
+      display_game_state
+      player_turn
+      break if game_over?
 
+      switch_player
     end
-
   end
-end
 
-private
+  private
 
-def create_players
-  puts "Player 1, enter your name (X)"
-  player1 = Player.new(gets.chomp.capitalize, "X")
+  def create_players
+    puts "Player 1, enter your name (X):"
+    player1 = Player.new(gets.chomp.capitalize, "X")
+    puts "player 2, enter your name (O):"
+    player2 = Player.new(gets.chomp.capitalize, "O")
+    [player1, player2]
+  end
 
-  puts "player2 play with O symbol, what's your name ?"
-  player2 = Player.new(gets.chomp.capitalize, "O")
+  def display_game_state
+    puts "\nCurrent board:"
+    board.display_board
+  end
 
-  [player1, player2]
-end
-
-def display_game_state
-  puts "\nCurrent board:"
-  board.display_board
-end
-
-def player_turn
-# Tant que la partie n'est pas finie - boucle
-  loop do
+  def player_turn
     puts "#{current_player.name} choose a position (0-8):"
-    position = gets.chomp
+    position = nil
 
-    if board.valid_position?(position)
-      board.update_board(position.to_i, current_player)
-      break 
-    else
+    loop do
+      position = gets.chomp
+      break if board.valid_position?(position)
+
       puts "Invalid position. Please try again."
     end
+    board.update_board(position.to_i, current_player)
+  end
+    
+  def switch_player
+    @current_player = players.find{ |player| player != current_player } 
+  end
+
+  def game_over?
+    if board.combo_winner?(current_player)
+      puts "#{current_player.name} wins! 🎉"
+      true
+    elsif board.full_board?
+      puts "It's a draw! 🤝"
+      true
+    else
+      false
+    end
   end
 end
-  
-def switch_player
-  @current_player = players.find{ |player| player != current_player } 
-end
-
-def game_over?
-  if winner?
-    puts "#{current_player.name} wins! 🎉"
-    true
-  elsif draw?
-    puts "It's a draw! 🤝"
-    true
-  else
-    false
-  end
-end
-
-  if game.combo_winner?(current_player)
-    puts "#{current_player.name} is the winner !!!"
-    break
-  end
-
-  if game.full_board?
-    puts "Game Over!"
-    break
-  end
-
-  current_player = player2
-  puts "#{current_player.name} choose your O position \n\n"
-
-  if game.combo_winner?(current_player)
-    puts "#{current_player.name} is the winner !!!"
-    break
-  end
-end
-
