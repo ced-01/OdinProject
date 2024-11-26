@@ -51,7 +51,7 @@ class Game
   end
     
   def switch_player
-    @current_player = players.find{ |player| player != current_player } 
+    @current_player = players.find{ |player| player != @current_player } 
   end
 
   def game_over?
